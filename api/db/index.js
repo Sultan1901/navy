@@ -1,12 +1,5 @@
-//connecting with remot mongo DB
 const mongoose = require('mongoose');
 
-// const options = {
-//   useNewUrlParser: true,
-//   useUnifiedTopolgy: true,
-// };
-mongoose
-  .connect('mongodb+srv://r0x:012774@cluster0.cxdsd.mongodb.net')
-  .then(() => {
-    console.log('DB OK');
-  });
+mongoose.connect('mongodb://localhost:27017/members').then(() => {
+  console.log('DB OK');
+});

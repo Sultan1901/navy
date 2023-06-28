@@ -1,17 +1,16 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const app = express();
-
 require('./db');
-
 const cors = require('cors');
+const morgan = require('morgan');
 app.use(cors());
 app.use(express());
 app.use(express.json());
+app.use(morgan());
 const memberRouter = require('./routes/router');
 app.use(memberRouter);
 
 const PORT = 5001;
 app.listen(PORT, () => {
-  console.log(`SERVER UNDER ATT4CK ON ${PORT}`);
+  console.log(`SERVER Running ON ${PORT}`);
 });
