@@ -14,6 +14,8 @@ import {
   Th,
   Td,
   TableContainer,
+  Button,
+  Input,
 } from '@chakra-ui/react';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
@@ -29,6 +31,7 @@ function App() {
   const [active, setActive] = useState(true);
   const [date, setDate] = useState(Date);
   const [day, setDay] = useState('');
+  const [show, setShow] = useState(false);
 
   const getMembers = async () => {
     try {
@@ -42,10 +45,11 @@ function App() {
     try {
       // eslint-disable-next-line
       const result = await axios.post('http://localhost:5001/addMember', {
-        member: member,
-        position: position,
-        patrol: patrol,
-        date: date,
+        member,
+        position,
+        patrol,
+        date,
+        day,
       });
       getMembers();
     } catch (error) {
@@ -70,55 +74,80 @@ function App() {
       <Box textAlign="center" fontSize="xl">
         <Grid minH="100vh" p={3}>
           <ColorModeSwitcher justifySelf="flex-end" />
-
           <TableContainer>
-            <Table variant="simple">
+            <Table colorScheme="teal" variant="simple">
               <Thead>
                 <Tr>
-                  <Th>Name</Th>
-                  <Th>Position</Th>
-                  <Th>Patrol</Th>
+                  <Th>آلاسم</Th>
+                  <Th>الرتبه</Th>
+                  <Th>آلدوريه</Th>
+                  <Th>آلايام</Th>
+                  <Th>التاريخ</Th>
                 </Tr>
               </Thead>
               {members.map((e, i) => {
                 return (
-                  <>
-                    {' '}
-                    <Tbody>
-                      <Tr>
-                        <Td>{e.member}</Td>
-                        <Td>{e.position}</Td>
-                        <Td>{e.patrol}</Td>
-                        <DeleteIcon onClick={() => deleteMember(e._id)} />
-                      </Tr>
-                    </Tbody>
-                  </>
+                  <Tbody key={i}>
+                    <Tr>
+                      <Td>{e.member}</Td>
+                      <Td>{e.position}</Td>
+                      <Td>{e.patrol}</Td>
+                      <Td>{e.day}</Td>
+                      <Td>{e.date.slice(0, 10)}</Td>
+                      <DeleteIcon onClick={() => deleteMember(e._id)} />
+                    </Tr>
+                  </Tbody>
                 );
               })}
             </Table>
           </TableContainer>
 
-          <VStack>
-            {' '}
-            <input
-              placeholder="Member Name"
-              onChange={e => {
-                setMember(e.target.value);
-              }}
-            />
-            <input
-              placeholder="Patrol"
-              onChange={e => {
-                setPatrol(e.target.value);
-              }}
-            />{' '}
-            <input
-              placeholder="position"
-              onChange={e => {
-                setPosition(e.target.value);
-              }}
-            />{' '}
-            <AddIcon onClick={addMembers} />
+          <VStack pt={2} border={2}>
+            {show ? (
+              <>
+                <Input
+                  w="50"
+                  textAlign="center"
+                  placeholder="الاسم"
+                  onChange={e => {
+                    setMember(e.target.value);
+                  }}
+                />
+                <Input
+                  w="50"
+                  textAlign="center"
+                  placeholder="الدوريه"
+                  onChange={e => {
+                    setPatrol(e.target.value);
+                  }}
+                />
+                <Input
+                  w="50"
+                  textAlign="center"
+                  placeholder="الرتبه"
+                  onChange={e => {
+                    setPosition(e.target.value);
+                  }}
+                />{' '}
+                <Input
+                  w="50"
+                  textAlign="center"
+                  placeholder="الايام"
+                  onChange={e => {
+                    setDay(e.target.value);
+                  }}
+                />
+                <AddIcon onClick={addMembers} />
+              </>
+            ) : (
+              <Button
+                onClick={() => {
+                  setShow(true);
+                }}
+              >
+                اضافة عنصر
+              </Button>
+            )}
           </VStack>
         </Grid>
       </Box>
