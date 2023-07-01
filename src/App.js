@@ -7,7 +7,13 @@ import {
   Grid,
   theme,
   Text,
-  OrderedList,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  TableContainer,
 } from '@chakra-ui/react';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
@@ -64,42 +70,55 @@ function App() {
       <Box textAlign="center" fontSize="xl">
         <Grid minH="100vh" p={3}>
           <ColorModeSwitcher justifySelf="flex-end" />
-          <VStack spacing={8}>
-            <OrderedList>
-              <>
-                {members.map((e, i) => {
-                  return (
-                    <div key={i}>
-                      <HStack spacing={3}>
-                        {' '}
-                        <Text>Name: {e.member}</Text>{' '}
-                        <Text>Position: {e.position}</Text>{' '}
+
+          <TableContainer>
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th>Name</Th>
+                  <Th>Position</Th>
+                  <Th>Patrol</Th>
+                </Tr>
+              </Thead>
+              {members.map((e, i) => {
+                return (
+                  <>
+                    {' '}
+                    <Tbody>
+                      <Tr>
+                        <Td>{e.member}</Td>
+                        <Td>{e.position}</Td>
+                        <Td>{e.patrol}</Td>
                         <DeleteIcon onClick={() => deleteMember(e._id)} />
-                      </HStack>
-                    </div>
-                  );
-                })}
-              </>
-              <input
-                placeholder="Member Name"
-                onChange={e => {
-                  setMember(e.target.value);
-                }}
-              />
-              <input
-                placeholder="Patrol"
-                onChange={e => {
-                  setPatrol(e.target.value);
-                }}
-              />{' '}
-              <input
-                placeholder="position"
-                onChange={e => {
-                  setPosition(e.target.value);
-                }}
-              />
-              <AddIcon onClick={addMembers} />
-            </OrderedList>
+                      </Tr>
+                    </Tbody>
+                  </>
+                );
+              })}
+            </Table>
+          </TableContainer>
+
+          <VStack>
+            {' '}
+            <input
+              placeholder="Member Name"
+              onChange={e => {
+                setMember(e.target.value);
+              }}
+            />
+            <input
+              placeholder="Patrol"
+              onChange={e => {
+                setPatrol(e.target.value);
+              }}
+            />{' '}
+            <input
+              placeholder="position"
+              onChange={e => {
+                setPosition(e.target.value);
+              }}
+            />{' '}
+            <AddIcon onClick={addMembers} />
           </VStack>
         </Grid>
       </Box>
