@@ -6,7 +6,7 @@ const morgan = require('morgan');
 app.use(cors());
 app.use(express());
 app.use(express.json());
-app.use(morgan());
+app.use(morgan('tiny'));
 const memberRouter = require('./routes/router');
 app.use(memberRouter);
 

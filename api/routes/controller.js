@@ -2,9 +2,9 @@ const memberModel = require('./../db/members');
 
 module.exports.addMember = (req, res) => {
   try {
-    const { name, patrol, day, position, active, date } = req.body;
+    const { member, patrol, day, position, active, date } = req.body;
     const newMember = new memberModel({
-      name,
+      member,
       patrol,
       day,
       position,
@@ -44,11 +44,11 @@ module.exports.deleteMember = async (req, res) => {
 };
 module.exports.updateMember = async (req, res) => {
   const { id } = req.params;
-  const { name, patrol, day, position, active, date } = req.body;
+  const { member, patrol, day, position, active, date } = req.body;
   try {
     await memberModel
       .findByIdAndUpdate(id, {
-        name,
+        member,
         patrol,
         day,
         position,
