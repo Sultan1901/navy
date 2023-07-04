@@ -6,5 +6,7 @@ memberRouter.post('/addMember', controller.addMember);
 memberRouter.get('/getMember', controller.getMember);
 memberRouter.delete('/deleteMember/:id', controller.deleteMember);
 memberRouter.put('/updateMember/:id', controller.updateMember);
+memberRouter.put('/updateDate/:id', controller.resetDuty);
+
 
 module.exports = memberRouter;

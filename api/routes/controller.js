@@ -1,4 +1,5 @@
 const memberModel = require('./../db/members');
+const fns = require('date-fns');
 
 module.exports.addMember = (req, res) => {
   try {
@@ -61,4 +62,26 @@ module.exports.updateMember = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+};
+module.exports.resetDuty = async (req, res) => {
+  const { id } = req.params;
+
+  const result = await memberModel.find({ _id: id }).then(result => {
+    let todDay = new Date();
+    let date = result[0].date;
+
+    let reset = fns.differenceInHours(new Date(todDay), new Date(date));
+    console.log(reset);
+    if (reset >= 1) {
+      const User = memberModel
+        .findByIdAndUpdate(id, {
+          date: new Date(),
+        })
+        .then(result => {
+          User.date = new Date();
+          result.save();
+        });
+    }
+    res.status(200).json(result);
+  });
 };

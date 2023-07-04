@@ -35,6 +35,7 @@ function App() {
     try {
       const result = await axios.get('http://localhost:5001/getMember');
       setMembers(result.data);
+      console.log(members);
     } catch (error) {
       // console.log(error);
     }
@@ -55,7 +56,6 @@ function App() {
     }
   };
   const deleteMember = async id => {
-    console.log(id);
     try {
       // eslint-disable-next-line
       const result = await axios.delete(
