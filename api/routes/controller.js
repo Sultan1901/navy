@@ -64,24 +64,31 @@ module.exports.updateMember = async (req, res) => {
   }
 };
 module.exports.resetDuty = async (req, res) => {
-  const { id } = req.params;
-
-  const result = await memberModel.find({ _id: id }).then(result => {
+  await memberModel.find({}).then(result => {
     let todDay = new Date();
-    let date = result[0].date;
-
-    let reset = fns.differenceInHours(new Date(todDay), new Date(date));
-    console.log(reset);
-    if (reset >= 1) {
-      const User = memberModel
-        .findByIdAndUpdate(id, {
-          date: new Date(),
-        })
-        .then(result => {
-          User.date = new Date();
-          result.save();
+    let date;
+    for (const key in result) {
+      date = result[key].date;
+      let reset = fns.differenceInHours(new Date(todDay), new Date(date));
+      console.log(reset);
+      if (reset >= 72) {
+        memberModel.find({}).then(result => {
+          result[key].date = new Date();
+          result[key].save();
         });
+      }
     }
+
     res.status(200).json(result);
   });
+};
+module.exports.getById = async (req, res) => {
+  const id = req.query.id;
+  try {
+    await memberModel.findById(id).then(result => {
+      res.status(200).json(result);
+    });
+  } catch (error) {
+    console.log(error);
+  }
 };

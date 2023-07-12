@@ -17,6 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
+import { differenceInHours } from 'date-fns';
 import axios from 'axios';
 function App() {
   useEffect(() => {
@@ -34,10 +35,23 @@ function App() {
   const getMembers = async () => {
     try {
       const result = await axios.get('http://localhost:5001/getMember');
-      setMembers(result.data);
-      console.log(members);
+      let sor = [];
+      result.data.map(e => {
+        const sorted = {};
+        let todDay = new Date();
+        let reset = differenceInHours(new Date(todDay), new Date(e.date));
+        sorted.name = e.member;
+        sorted.huors = reset;
+        sorted.position = e.position;
+        sorted.patrol = e.patrol;
+        sorted.day = e.day;
+        sorted.date = e.date;
+        sor.push(sorted);
+        sor.sort((a, b) => b.huors - a.huors);
+      });
+      setMembers(sor);
     } catch (error) {
-      // console.log(error);
+      console.log(error);
     }
   };
   const addMembers = async () => {
@@ -66,6 +80,10 @@ function App() {
       console.log(error);
     }
   };
+  const refresh = async () => {
+    const result = await axios.put(`http://localhost:5001/updateDate`);
+    getMembers()
+  };
 
   return (
     <ChakraProvider theme={theme}>
@@ -73,6 +91,9 @@ function App() {
         <Grid minH="100vh" p={3}>
           <ColorModeSwitcher justifySelf="flex-end" />
           <TableContainer>
+            <Button w="20" onClick={() => refresh()}>
+              اعادة جدوله
+            </Button>
             <Table colorScheme="teal" variant="simple">
               <Thead>
                 <Tr>
@@ -80,19 +101,21 @@ function App() {
                   <Th>الرتبه</Th>
                   <Th>آلدوريه</Th>
                   <Th>آلايام</Th>
-                  <Th>التاريخ</Th>
+                  <Th>حذف</Th>
+                  {/* <Th>التاريخ</Th> */}
                 </Tr>
               </Thead>
               {members.map((e, i) => {
                 return (
                   <Tbody key={i}>
                     <Tr>
-                      <Td>{e.member}</Td>
+                      <Td>{e.name}</Td>
                       <Td>{e.position}</Td>
                       <Td>{e.patrol}</Td>
-                      <Td>{e.day}</Td>
-                      <Td>{e.date.slice(0, 10)}</Td>
-                      <DeleteIcon onClick={() => deleteMember(e._id)} />
+                      {/* <Td>{e.day}</Td> */}
+                      <Td>{<Input w="50" type='date'></Input>}</Td>
+                      {/* <Td>{e.date.slice(0, 10)}</Td> */}
+                     <Td><DeleteIcon cursor="pointer" onClick={() => deleteMember(e._id)} /></Td> 
                     </Tr>
                   </Tbody>
                 );
@@ -135,7 +158,7 @@ function App() {
                     setDay(e.target.value);
                   }}
                 />
-                <AddIcon onClick={addMembers} />
+                <AddIcon cursor="pointer" onClick={addMembers} />
               </>
             ) : (
               <Button
