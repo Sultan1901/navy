@@ -51,7 +51,7 @@ function App() {
       });
       setMembers(sor);
     } catch (error) {
-      console.log(error);
+      console.log('Error: ' + error);
     }
   };
   const addMembers = async () => {
@@ -82,7 +82,7 @@ function App() {
   };
   const refresh = async () => {
     const result = await axios.put(`http://localhost:5001/updateDate`);
-    getMembers()
+    getMembers();
   };
 
   return (
@@ -113,9 +113,14 @@ function App() {
                       <Td>{e.position}</Td>
                       <Td>{e.patrol}</Td>
                       {/* <Td>{e.day}</Td> */}
-                      <Td>{<Input w="50" type='date'></Input>}</Td>
+                      <Td>{<Input w="50" type="date"></Input>}</Td>
                       {/* <Td>{e.date.slice(0, 10)}</Td> */}
-                     <Td><DeleteIcon cursor="pointer" onClick={() => deleteMember(e._id)} /></Td> 
+                      <Td>
+                        <DeleteIcon
+                          cursor="pointer"
+                          onClick={() => deleteMember(e._id)}
+                        />
+                      </Td>
                     </Tr>
                   </Tbody>
                 );
